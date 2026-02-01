@@ -12,7 +12,7 @@ const Typewriter = ({ content, speed = 2 }) => {
     setDisplayedContent('');
     let i = 0;
     const timer = setInterval(() => {
-      const chunk = content.substring(0, i + 10); // Thoda fast typing
+      const chunk = content.substring(0, i + 10);
       setDisplayedContent(chunk);
       i += 10;
       if (i > content.length) {
@@ -57,7 +57,8 @@ function App() {
     setResult(null);
 
     try {
-      const response = await fetch('http://localhost:5000/explain', {
+      // 🔥 UPDATED LIVE BACKEND URL 🔥
+      const response = await fetch('https://day35-aicodereviewer.onrender.com/explain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code, language, depth })

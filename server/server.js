@@ -6,7 +6,15 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// 🔥 CORS FIX: Allow All Origins 🔥
+// Ye bata raha hai ki "Koi bhi website (origin: *) request bhej sakti hai"
+app.use(cors({
+    origin: '*', 
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
 app.use(express.json());
 
 // Debugging: Check API Key
@@ -24,7 +32,6 @@ app.post('/explain', async (req, res) => {
     
     console.log(`\n🔹 Analyzing request for: ${language}`);
 
-    // 🔥 PROMPT: RUNTIME DEBUGGER & ARCHITECT 🔥
     const systemPrompt = `You are a Principal Software Architect and Runtime Environment Simulator.
     
     YOUR GOAL: Trace the execution of the code line-by-line as if you are the CPU/Interpreter.
@@ -70,7 +77,6 @@ app.post('/explain', async (req, res) => {
 
         const rawContent = completion.choices[0].message.content;
         
-        // --- FAIL-SAFE SPLIT LOGIC ---
         const parts = rawContent.split('|||SPLIT|||');
         const explanation = parts[0] ? parts[0].trim() : "Analysis failed.";
         const suggestions = parts[1] ? parts[1].trim() : "No suggestions provided.";
@@ -84,5 +90,5 @@ app.post('/explain', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`✅ Server running on http://localhost:${PORT}`);
+    console.log(`✅ Server running on port ${PORT}`);
 });
